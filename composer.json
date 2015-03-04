@@ -1,0 +1,16 @@
+{
+    "name": "shivam/kayako",
+    "description": "Fetch and display tweets which are re-tweeted at-least once and contains hashtag #custserv",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Shivam Dixit",
+            "email": "shivamd001@gmail.com"
+        }
+    ],
+    "require": {
+        "phpunit/phpunit": "4.7.x-dev",
+        "abraham/twitteroauth": "0.5.1"
+    }
+}
