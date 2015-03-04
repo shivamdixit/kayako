@@ -77,11 +77,11 @@ class RedisTest extends \PHPUnit_Framework_TestCase
     public function testGetTweetsLesserThan()
     {
         $expected = array(
-            array('id_str' => '100', 'text' => 'Foo', 'screen_name' => 'Bar', 'retweet_count' => '1'),
-            array('id_str' => '101', 'text' => 'Baz', 'screen_name' => 'Foo', 'retweet_count' => '1')
+            array('id_str' => '101', 'text' => 'Baz', 'screen_name' => 'Foo', 'retweet_count' => '1'),
+            array('id_str' => '100', 'text' => 'Foo', 'screen_name' => 'Bar', 'retweet_count' => '1')
         );
 
-        $this->assertSame($expected, $this->redisObject->getTweetsLessThan(102));
+        $this->assertSame($expected, $this->redisObject->getTweetsLessThan(102, 20));
     }
 
     /**
