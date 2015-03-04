@@ -12,7 +12,8 @@
     "require": {
         "phpunit/phpunit": "4.7.x-dev",
         "abraham/twitteroauth": "0.5.1",
-        "slim/slim": "2.6.1"
+        "slim/slim": "2.6.1",
+        "predis/predis": "1.0.x-dev"
     },
     "autoload": {
         "psr-4": {

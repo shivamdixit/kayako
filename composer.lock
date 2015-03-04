@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "de8312ec4b1e9a3db5d1e981644b59ec",
+    "hash": "4c4b9a4b9a3e141500da366f4700cb3e",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -595,6 +595,56 @@
             "time": "2014-10-03 05:12:11"
         },
         {
+            "name": "predis/predis",
+            "version": "1.0.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nrk/predis.git",
+                "reference": "c4c36cae7ab09bdeef7f85b1c3d55fe120aa1117"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/c4c36cae7ab09bdeef7f85b1c3d55fe120aa1117",
+                "reference": "c4c36cae7ab09bdeef7f85b1c3d55fe120aa1117",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "suggest": {
+                "ext-curl": "Allows access to Webdis when paired with phpiredis",
+                "ext-phpiredis": "Allows faster serialization and deserialization of the Redis protocol"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Predis\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Alessandri",
+                    "email": "suppakilla@gmail.com",
+                    "homepage": "http://clorophilla.net"
+                }
+            ],
+            "description": "Flexible and feature-complete PHP client library for Redis",
+            "homepage": "http://github.com/nrk/predis",
+            "keywords": [
+                "nosql",
+                "predis",
+                "redis"
+            ],
+            "time": "2015-01-02 12:54:29"
+        },
+        {
             "name": "sebastian/comparator",
             "version": "1.1.1",
             "source": {
@@ -1063,7 +1113,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpunit/phpunit": 20
+        "phpunit/phpunit": 20,
+        "predis/predis": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

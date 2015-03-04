@@ -40,7 +40,7 @@ class Twitter
     /**
      * Contains the hashtag
      *
-     * @var string $hashtag the tag to search for
+     * @var string $hashtag
      */
     private $hashtag;
 
@@ -52,11 +52,25 @@ class Twitter
     private $path;
 
     /**
-     * Maximum records to be fetched at a time from twitter
+     * Max number of records to be fetched from Twitter at a time
      *
-     * @var int $count Default value is 100
+     * @var int $count default value is 100
      */
-    private $count;
+    private $fetchCount;
+
+    /**
+     * Object to interact with Redis cache
+     *
+     * @var Redis
+     */
+    private $cache;
+
+    /**
+     * Max number of records to be fetched from cache at a time
+     *
+     * @var int default is 20
+     */
+    private $cacheCount;
 
     /**
      * Constructor
@@ -66,7 +80,9 @@ class Twitter
         $this->twitterOAuth = (new Authenticate())->getConnection();
         $this->hashtag = '#custserv';
         $this->path = 'search/tweets';
-        $this->count = 100;
+        $this->fetchCount = 100;
+        $this->cache = new Redis();
+        $this->cacheCount = 20;
     }
 
     /**
@@ -85,18 +101,80 @@ class Twitter
     }
 
     /**
+     * Function to get tweets either from cache or using API
+     * depending upon the parameters
+     *
+     * @param int $maxId to fetch all tweets below $maxId
+     * @return array
+     */
+    public function getTweets($maxId = null)
+    {
+        $result = array();  // contains the final result of request
+
+        // To remove redundancy, decrease one from maxId
+        // if 64bit int is supported
+        $maxId = $this->processMaxId($maxId);
+
+        // Search the cache for tweets
+        $tweets = $this->cache->getTweetsLessThan($maxId, $this->cacheCount);
+
+        if ($maxId !== null) {
+            if (count($tweets) === $this->cacheCount) {
+                $result['status'] = true;
+                $result['tweets'] = $tweets;
+                $result['from'] = 'cache';
+                return $result;
+            } else {
+                return $this->getResult(0, $maxId);
+            }
+        } else {
+            return $this->getResult(1, $maxId);
+        }
+    }
+
+    /**
+     * Function to calculate result of request
+     *
+     * @param int $flag can be 0 or 1
+     *      - 0     Fetch tweets which are newwer than maximum id stored
+     *      - 1     Fetch tweets which are older than minimum id stored
+     *
+     * @param int $maxId search tweets below it _i.e_ min id stored
+     * @return array of result
+     */
+    private function getResult($flag, $maxId)
+    {
+        if ($flag === 1) {
+            $fetchedTweets = $this->fetchAndCache(null, $this->cache->getMaxTweetId());
+        } else {
+            $fetchedTweets = $this->fetchAndCache($this->cache->getMinTweetId());
+        }
+
+        if ($fetchedTweets['status']) {
+            $tweets = $this->cache->getTweetsLessThan($maxId, $this->cacheCount);
+            $result['status'] = true;
+            $result['tweets'] = $tweets;
+        } else {
+            $result['status'] = false;
+            $result['error'] = $fetchedTweets['error'];
+        }
+
+        return $result;
+    }
+
+    /**
      * Function to fetch tweets based on the parameter specified
      *
      * @param int $maxId Max ID of the tweet
-     * @return array of objects containing tweets
+     * @param int $sinceId Request start from
+     * @return array of tweets containing tweets
      */
-    public function fetchTweets($maxId = null)
+    public function fetchAndCache($maxId = null, $sinceId = null)
     {
         // Contains the final result of the call
         $result = array();
 
-        // To remove redundancy, decrease one from maxId
-        // if 64bit int is supported
+
         $maxId = $this->processMaxId($maxId);
 
         try {
@@ -105,8 +183,9 @@ class Twitter
                 $this->path,
                 array(
                     'q' => $this->hashtag,
-                    'count' => $this->count,
-                    'max_id' => $maxId
+                    'count' => $this->fetchCount,
+                    'max_id' => $maxId,
+                    'since_id' => $sinceId
                 )
             );
 
@@ -115,11 +194,18 @@ class Twitter
             $result['tweets'] = array();
 
             // Loop through all the tweets
-            foreach ($tweets->statuses as $value ) {
+            foreach ($tweets->statuses as $value) {
                 // Extract tweets having more than one RT
                 if ($value->retweet_count >= 1) {
                     // Push the tweets in the final result
-                    array_push($result['tweets'], $value);
+                    $tweetData = array(
+                        'id_str' => $value->id_str,
+                        'text' => $value->text,
+                        'screen_name' => $value->user->screen_name,
+                        'retweet_count' => $value->retweet_count
+                    );
+                    $this->cache->addTweet($value->id, $tweetData);
+                    array_push($result['tweets'], $tweetData);
                 }
             }
 

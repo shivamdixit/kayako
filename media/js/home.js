@@ -36,9 +36,11 @@ function getTweets(callback) {
                 alert('Some error occurred. Please try again later');
                 return false;
             }
+            console.log(data);
 
             /** Updated lowestTweetId to ID of the last tweet fetched **/
             lowestTweetId = data.tweets[data.tweets.length - 1].id_str;
+            console.log('Lowest ID: ' + lowestTweetId);
             /** Fire the callback **/
             callback(data.tweets);
         }
@@ -58,10 +60,11 @@ function displayTweets(statuses) {
             var div = $("<div/>", {'class': 'row'});
             $(".container").append(div);    /** Add row div at the end **/
         }
+        console.log(tweet.id_str);
         var tweetDiv = $(tweetTemplate);
         tweetDiv.find('.tweet').html(tweet.text);
         tweetDiv.find('.rt-count').html('RT: ' + tweet.retweet_count);
-        tweetDiv.find('.tweet-owner').html('@' + tweet.user.screen_name);
+        tweetDiv.find('.tweet-owner').html('@' + tweet.screen_name);
         $(".row").last().append(tweetDiv);
         count++;
     });
