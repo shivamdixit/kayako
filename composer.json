@@ -13,5 +13,10 @@
         "phpunit/phpunit": "4.7.x-dev",
         "abraham/twitteroauth": "0.5.1",
         "slim/slim": "2.6.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Kayako\\": "app/models"
+        }
     }
 }
