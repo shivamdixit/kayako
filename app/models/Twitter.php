@@ -136,7 +136,7 @@ class Twitter
      * Function to calculate result of request
      *
      * @param int $flag can be 0 or 1
-     *      - 0     Fetch tweets which are newwer than maximum id stored
+     *      - 0     Fetch tweets which are newer than maximum id stored
      *      - 1     Fetch tweets which are older than minimum id stored
      *
      * @param int $maxId search tweets below it _i.e_ min id stored
@@ -173,9 +173,6 @@ class Twitter
     {
         // Contains the final result of the call
         $result = array();
-
-
-        $maxId = $this->processMaxId($maxId);
 
         try {
             // Make the API call using given params
