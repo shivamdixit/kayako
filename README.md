@@ -1,7 +1,6 @@
 Kayako
 ======
-[![Build Status](https://travis-ci.org/shivamdixit/kayako.svg?branch=master)](https://travis-ci.org/shivamdixit/kayako) 
-[![Coverage Status](https://coveralls.io/repos/shivamdixit/kayako/badge.svg)](https://coveralls.io/r/shivamdixit/kayako)
+[![Build Status](https://travis-ci.org/shivamdixit/kayako.svg?branch=master)](https://travis-ci.org/shivamdixit/kayako)
 
 Fetch and display tweets which are re-tweeted at-least once and contains hashtag #custserv.
 
@@ -9,6 +8,12 @@ Fetch and display tweets which are re-tweeted at-least once and contains hashtag
 
 * View older tweets through infinite scroll
 * Redis cache support for faster loading
+* All the previous viewed tweets are cached in Redis database. If requested tweets are newer or older than cached tweets then only fetch the tweets from the API. Otherwise request is served from cache.
+
+### Dependencies
+
+* Redis server is MUST
+* PHP must be running on 64bit machine
 
 ### Instructions
 
@@ -17,6 +22,7 @@ Fetch and display tweets which are re-tweeted at-least once and contains hashtag
 * Run ``composer update`` from command line
 * Add your API secrets in ``app/config/config.sample.php``
 * Rename the file to ``config.php``
+* Run redis-server with default config
 * Open browser and navigate to localhost
 * All the tweets will be displayed
 
