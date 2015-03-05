@@ -1,5 +1,6 @@
 Kayako
 ======
+[![Build Status](https://travis-ci.org/shivamdixit/kayako.svg?branch=master)](https://travis-ci.org/shivamdixit/kayako)
 
 Fetch and display tweets which are re-tweeted at-least once and contains hashtag #custserv.
 
