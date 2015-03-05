@@ -1,6 +1,7 @@
 Kayako
 ======
-[![Build Status](https://travis-ci.org/shivamdixit/kayako.svg?branch=master)](https://travis-ci.org/shivamdixit/kayako)
+[![Build Status](https://travis-ci.org/shivamdixit/kayako.svg?branch=master)](https://travis-ci.org/shivamdixit/kayako) 
+[![Coverage Status](https://coveralls.io/repos/shivamdixit/kayako/badge.svg)](https://coveralls.io/r/shivamdixit/kayako)
 
 Fetch and display tweets which are re-tweeted at-least once and contains hashtag #custserv.
 
